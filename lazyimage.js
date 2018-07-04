@@ -70,9 +70,8 @@
 					}else{
 						image.style.marginBottom = '10px';
 					}
-				    image.style.height = 'unset';
-	    			image.style.width = 'unset';
 	    		}
+    			image.style.width = 'unset';
 	        }
 
 	   		imageHolder.removeChild(imageHolder.querySelector('.loader-cover'));
