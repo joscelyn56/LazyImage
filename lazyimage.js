@@ -75,6 +75,8 @@
 	        }
 
 	   		imageHolder.removeChild(imageHolder.querySelector('.loader-cover'));
+	   		image.removeAttribute('data-lazy');
+	   		image.removeAttribute('class');
 	   		image.src = attach;	
 	   	}
 	    img.src = attach;
