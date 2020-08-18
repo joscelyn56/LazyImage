@@ -5,80 +5,92 @@
 *
 * Copyright (c) 2018 Okwu Joscelyn Kinikachi
 */
-(function(){
-
-	window.addEventListener('load', function(){
+(function () {
+	
+	window.addEventListener('load', function () {
 		const images = document.getElementsByClassName('lazy-img');
-
-		for(var i = 0; i < images.length; i++){
+		
+		for (var i = 0; i < images.length; i++) {
 			var image = images[i];
 			image.addEventListener('load', LazyImage(image), false);
 		}
 	});
-
-	function LazyImage(image){
+	
+	function LazyImage(image) {
 		const imageParent = image.parentElement;
 		var imageHolder = imageParent;
-		if(imageParent.nodeName == 'A'){
+		if (imageParent.nodeName == 'A') {
 			imageHolder = image.parentElement.parentElement;
 		}
-
-	    let loaderCover = document.createElement('div');
-	    loaderCover.className = 'loader-cover';
-	    let loader = document.createElement('div');
-	    loader.className = 'loader';
-	    loaderCover.appendChild(loader);
-
-	    imageHolder.appendChild(loaderCover)
-
-	    let img_width = 0;
-	    let img_height = 0;
-
+		
+		let loaderCover = document.createElement('div');
+		loaderCover.className = 'loader-cover';
+		let loader = document.createElement('div');
+		loader.className = 'loader';
+		loaderCover.appendChild(loader);
+		
+		imageHolder.appendChild(loaderCover)
+		
+		let img_width = 0;
+		let img_height = 0;
+		
 		let attach = image.getAttribute('data-lazy');
-
-    	imageHolder.style.textAlign = "center";
-    	imageHolder.style.position = "relative";
-
-        let parent_width = imageParent.offsetWidth;
-        let parent_height = imageHolder.offsetHeight;
-        let image_max_width = parent_width;
-        let image_max_height = parent_height;
-
-        var screenWidth = window.innerWidth
+		
+		imageHolder.style.textAlign = "center";
+		imageHolder.style.position = "relative";
+		
+		let parent_width = imageParent.offsetWidth;
+		let parent_height = imageHolder.offsetHeight;
+		let image_max_width = parent_width;
+		let image_max_height = parent_height;
+		
+		var screenWidth = window.innerWidth
 			|| document.documentElement.clientWidth
 			|| document.body.clientWidth;
-
+		
 		let img = new Image();
-		img.onload = function() {
+		img.onload = function () {
 			
-			if (this.width >= image_max_width && this.height >= image_max_height) {
-	            img_width = '100%';
-	            img_height = image_max_height;
-	            if(imageParent.nodeName !== 'A'){
-		            image.style.width = img_width;
-		            image.style.height = img_height;
-		        }
-	        } else{
-				if(imageParent.nodeName == 'A'){
-				    image.style.margin = 'auto';
-					if(screenWidth > 491){
-		        		image.style.position = 'absolute';
-					    image.style.top = 0;
-					    image.style.bottom = 0;
-					    image.style.left = 0;
-					    image.style.right = 0;
-					}else{
-						image.style.marginBottom = '10px';
+			if (screenWidth > 650) {
+				if (this.width >= image_max_width && this.height <= image_max_height) {
+					img_width = '100%';
+					img_height = 'auto';
+					if (imageParent.nodeName !== 'A') {
+						image.style.width = img_width;
+						image.style.height = img_height;
 					}
-	    		}
-    			image.style.width = 'unset';
-	        }
-
-	   		imageHolder.removeChild(imageHolder.querySelector('.loader-cover'));
-	   		image.removeAttribute('data-lazy');
-	   		image.removeAttribute('class');
-	   		image.src = attach;	
-	   	}
-	    img.src = attach;
-    }
+				} else if (this.width >= image_max_width && this.height >= image_max_height) {
+					img_width = 'auto';
+					img_height = '100%';
+					if (imageParent.nodeName !== 'A') {
+						image.style.width = img_width;
+						image.style.height = img_height;
+					}
+				} else {
+					if (imageParent.nodeName == 'A') {
+						image.style.margin = 'auto';
+						if (screenWidth > 491) {
+							image.style.position = 'absolute';
+							image.style.top = 0;
+							image.style.bottom = 0;
+							image.style.left = 0;
+							image.style.right = 0;
+						} else {
+							image.style.marginBottom = '10px';
+						}
+					}
+					image.style.width = 'unset';
+				}
+			} else {
+				image.style.width = '100%';
+				image.style.height = 'auto';
+			}
+			
+			imageHolder.removeChild(imageHolder.querySelector('.loader-cover'));
+			image.removeAttribute('data-lazy');
+			image.classList.remove('lazy-img');
+			image.src = attach;
+		}
+		img.src = attach;
+	}
 })()
